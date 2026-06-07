@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Toyota Malaysia — Semak Kelayakan</title>
+<meta name="description" content="Semak kelayakan loan kereta Toyota Malaysia. HP calculator, model prices, variants.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#EB0A1E;--red-dark:#B80A1E;--grad:linear-gradient(135deg,#EB0A1E,#CC0013);--bg:#f5f5f7;--card:#fff;--text:#1d1d1f;--text2:#6e6e73;--green:#34c759;--orange:#ff9500}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+/* Header */
+.header{background:var(--grad);color:#fff;padding:48px 20px 32px;text-align:center;position:relative;overflow:hidden}
+.header::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 40%,rgba(255,255,255,0.08) 0%,transparent 60%);pointer-events:none}
+.header h1{font-size:28px;font-weight:700;letter-spacing:-0.5px;position:relative;z-index:1}
+.header p{font-size:14px;opacity:.8;margin-top:6px;position:relative;z-index:1;line-height:1.4}
+.header .logo{width:60px;height:60px;margin:0 auto 12px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;position:relative;z-index:1}
+/* Toggle BM/EN */
+.lang-toggle{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:4px 12px;border-radius:16px;font-size:12px;cursor:pointer;font-weight:500;z-index:2}
+.lang-toggle:active{transform:scale(.95)}
+/* Calculator */
+.calc{background:var(--card);margin:-20px 16px 0;border-radius:16px;padding:20px;box-shadow:0 4px 24px rgba(0,0,0,0.06);position:relative;z-index:2}
+.calc label{font-size:13px;font-weight:600;color:var(--text2);display:block;margin-bottom:4px}
+.calc .input-group{position:relative;margin-bottom:14px}
+.calc .input-group .prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;font-weight:600;color:var(--text2);pointer-events:none}
+.calc input,.calc select{width:100%;padding:12px 14px;font-size:16px;border:1.5px solid #e5e5ea;border-radius:12px;background:#fafafa;outline:none;transition:border-color .2s;appearance:none;-webkit-appearance:none}
+.calc input:focus,.calc select:focus{border-color:var(--red);background:#fff}
+.calc input[type=number]{padding-left:32px}
+.calc .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+/* Result summary */
+.summary{background:var(--grad);margin:16px 16px 0;border-radius:16px;padding:16px 20px;color:#fff;display:none}
+.summary.active{display:block;animation:fadeUp .3s ease}
+.summary .big{font-size:32px;font-weight:700;letter-spacing:-1px}
+.summary .big .currency{font-size:18px;font-weight:400;opacity:.8}
+.summary .details{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.summary .detail-item{text-align:center}
+.summary .detail-item .num{font-size:18px;font-weight:600}
+.summary .detail-item .lbl{font-size:11px;opacity:.7;margin-top:2px}
+/* Filter chips */
+.filters{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.filters::-webkit-scrollbar{display:none}
+.chip{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;border:1.5px solid #e5e5ea;background:var(--card);cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0}
+.chip.active{background:var(--red);color:#fff;border-color:var(--red)}
+.chip:active{transform:scale(.95)}
+.chip-count{font-size:11px;opacity:.6;margin-left:4px}
+/* Model grid */
+.models{padding:8px 16px 100px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.model-card{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.04);transition:all .2s;cursor:pointer;position:relative}
+.model-card:active{transform:scale(.97)}
+.model-card .img-wrap{width:100%;aspect-ratio:16/10;background:#f0f0f5;position:relative;overflow:hidden}
+.model-card .img-wrap img{width:100%;height:100%;object-fit:cover}
+.model-card .img-wrap .fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px;opacity:.15;font-weight:800;color:var(--red)}
+.model-card .model-name{font-size:14px;font-weight:600;padding:8px 12px 2px}
+.model-card .model-type{font-size:11px;color:var(--text2);padding:0 12px}
+.model-card .model-price{font-size:15px;font-weight:700;padding:4px 12px 8px;color:var(--red)}
+.model-card .model-price .from{font-size:11px;font-weight:400;color:var(--text2)}
+.model-card .badge{position:absolute;top:8px;right:8px;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:600;color:#fff}
+.badge-lulus{background:var(--green)}
+.badge-gagal{background:var(--orange)}
+.badge-info{background:rgba(0,0,0,0.5);backdrop-filter:blur(4px)}
+/* Detail panel */
+.detail-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;display:none;animation:fadeIn .2s}
+.detail-overlay.active{display:block}
+.detail-panel{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-radius:20px 20px 0 0;z-index:101;max-height:85vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);padding:20px}
+.detail-panel.active{transform:translateY(0)}
+.detail-panel .handle{width:36px;height:4px;background:#e5e5ea;border-radius:2px;margin:0 auto 16px}
+.detail-panel .d-header{display:flex;gap:12px;margin-bottom:16px}
+.detail-panel .d-img{width:120px;height:80px;border-radius:10px;background:#f0f0f5;flex-shrink:0;overflow:hidden}
+.detail-panel .d-img img{width:100%;height:100%;object-fit:cover}
+.detail-panel .d-info{flex:1}
+.detail-panel .d-name{font-size:18px;font-weight:700}
+.detail-panel .d-type{font-size:13px;color:var(--text2);margin-top:2px}
+.detail-panel .d-price{font-size:22px;font-weight:700;color:var(--red);margin-top:4px}
+.detail-panel .d-price .from{font-size:12px;font-weight:400;color:var(--text2)}
+.detail-panel .d-status{padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600;display:inline-block;margin-top:6px}
+/* Variants */
+.variants{list-style:none}
+.variants li{padding:12px 0;border-bottom:1px solid #f0f0f5;display:flex;justify-content:space-between;align-items:center}
+.variants li:last-child{border-bottom:none}
+.variants .v-name{font-size:14px;font-weight:500}
+.variants .v-price{font-size:14px;font-weight:600;color:var(--red)}
+.variants .v-status{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:500}
+/* WhatsApp */
+.whatsapp-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:#25D366;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:600;cursor:pointer;margin-top:16px;transition:opacity .2s;text-decoration:none}
+.whatsapp-btn:active{opacity:.8}
+/* No results */
+.no-results{text-align:center;padding:40px 20px;color:var(--text2);display:none;grid-column:1/-1}
+.no-results.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media(max-width:400px){.models{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <button class="lang-toggle" onclick="toggleLang()">BM</button>
+  <div class="logo">T</div>
+  <h1><span data-en="Toyota Eligibility Checker" data-bm="Semak Kelayakan Toyota">Semak Kelayakan Toyota</span></h1>
+  <p><span data-en="Check your loan eligibility for any Toyota model" data-bm="Semak kelayakan loan untuk mana-mana model Toyota">Semak kelayakan loan untuk mana-mana model Toyota</span></p>
+</div>
+
+<!-- Calculator -->
+<div class="calc">
+  <div class="row">
+    <div class="input-group">
+      <label data-en="Monthly Income" data-bm="Pendapatan Bulanan">Pendapatan Bulanan</label>
+      <span class="prefix">RM</span>
+      <input type="number" id="salary" value="5000" min="1000" max="100000" step="500" oninput="calcAll()">
+    </div>
+    <div class="input-group">
+      <label data-en="Loan Tenure" data-bm="Tempoh Loan">Tempoh Loan</label>
+      <select id="tenure" onchange="calcAll()">
+        <option value="5">5 tahun</option>
+        <option value="7" selected>7 tahun</option>
+        <option value="9">9 tahun</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-group">
+      <label data-en="Interest Rate" data-bm="Kadar Faedah">Kadar Faedah</label>
+      <select id="rate" onchange="calcAll()">
+        <option value="2.5">2.5%</option>
+        <option value="3.0" selected>3.0%</option>
+        <option value="3.5">3.5%</option>
+        <option value="4.0">4.0%</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label data-en="Down Payment" data-bm="Down Payment">Down Payment</label>
+      <select id="dp" onchange="calcAll()">
+        <option value="10">10%</option>
+        <option value="15">15%</option>
+        <option value="20">20%</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Summary -->
+<div class="summary" id="summary">
+  <div class="big"><span class="currency">RM</span><span id="maxLoan">0</span></div>
+  <div data-en="Maximum affordable loan" data-bm="Maksimum loan mampu dibayar" style="font-size:13px;opacity:.8">Maksimum loan mampu dibayar</div>
+  <div class="details">
+    <div class="detail-item"><div class="num" id="dMonthly">RM0</div><div class="lbl" data-en="Monthly" data-bm="Bulanan">Bulanan</div></div>
+    <div class="detail-item"><div class="num" id="dDown">RM0</div><div class="lbl" data-en="Down Payment" data-bm="DP 10%">DP 10%</div></div>
+    <div class="detail-item"><div class="num" id="dTotal">RM0</div><div class="lbl" data-en="Total Loan" data-bm="Total Pinjaman">Total Pinjaman</div></div>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="filters">
+  <div class="chip active" onclick="setFilter(this,'all')"><span data-en="All" data-bm="Semua">Semua</span> <span class="chip-count" id="countAll">32</span></div>
+  <div class="chip" onclick="setFilter(this,'lulus')"><span data-en="Eligible" data-bm="Lulus">Lulus</span> <span class="chip-count" id="countLulus">0</span></div>
+  <div class="chip" onclick="setFilter(this,'gagal')"><span data-en="Not Eligible" data-bm="Gagal">Gagal</span> <span class="chip-count" id="countGagal">0</span></div>
+  <div class="chip" onclick="setFilter(this,'hatchback')">Hatchback</div>
+  <div class="chip" onclick="setFilter(this,'sedan')">Sedan</div>
+  <div class="chip" onclick="setFilter(this,'suv')">SUV</div>
+  <div class="chip" onclick="setFilter(this,'mpv')">MPV</div>
+  <div class="chip" onclick="setFilter(this,'pickup')">Pickup</div>
+  <div class="chip" onclick="setFilter(this,'crossover')">Crossover</div>
+  <div class="chip" onclick="setFilter(this,'coupe')">Coupe</div>
+  <div class="chip" onclick="setFilter(this,'van')">Van</div>
+  <div class="chip" onclick="setFilter(this,'ev')">EV / HEV</div>
+</div>
+
+<!-- Model Grid -->
+<div class="models" id="models"></div>
+
+<!-- Detail Panel -->
+<div class="detail-overlay" id="overlay" onclick="closeDetail()"></div>
+<div class="detail-panel" id="panel">
+  <div class="handle"></div>
+  <div class="d-header">
+    <div class="d-img"><img id="dImg" src="" alt=""></div>
+    <div class="d-info">
+      <div class="d-name" id="dName"></div>
+      <div class="d-type" id="dType"></div>
+      <div class="d-price"><span class="from">From </span>RM<span id="dPrice">0</span></div>
+      <div class="d-status" id="dStatus"></div>
+    </div>
+  </div>
+  <h3 style="font-size:14px;color:var(--text2);margin-bottom:8px" data-en="Available Variants" data-bm="Varian Tersedia">Varian Tersedia</h3>
+  <ul class="variants" id="variants"></ul>
+  <button class="whatsapp-btn" id="waBtn" onclick="sendWA()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span data-en="Inquiry via WhatsApp" data-bm="Buat Inquiry WhatsApp">Buat Inquiry WhatsApp</span>
+  </button>
+</div>
+
+<script>
+// ── Model Data ──────────────────────────────────────────────────
+const MODELS = [
+  {id:'yaris', name:'Yaris', type:'Hatchback', cat:'hatchback', price:88000, img:'https://www.toyota.com.my/content/dam/malaysia/models/yaris/overview/yaris-overview-new-v3.jpg', variants:[{name:'Yaris 1.5E',price:88000},{name:'Yaris 1.5G',price:94800},{name:'Yaris 1.5S',price:99800}]},
+  {id:'vios', name:'Vios', type:'Sedan', cat:'sedan', price:90600, img:'https://www.toyota.com.my/content/dam/malaysia/models/new-vios/banner/MainPageTiles.jpg', variants:[{name:'Vios 1.5E',price:90600},{name:'Vios 1.5G',price:97600},{name:'Vios 1.5S',price:102800}]},
+  {id:'vios-hev', name:'Vios HEV', type:'Sedan Hybrid', cat:'sedan|ev', price:103900, img:'https://www.toyota.com.my/content/dam/malaysia/models/new-vios/banner/MainPageTiles.jpg', variants:[{name:'Vios HEV 1.5',price:103900},{name:'Vios HEV GR Sport',price:109900}]},
+  {id:'veloz', name:'Veloz', type:'MPV', cat:'mpv', price:95000, img:'', variants:[{name:'Veloz 1.5AV',price:95000}]},
+  {id:'yaris-cross', name:'Yaris Cross', type:'SUV', cat:'suv', price:99900, img:'', variants:[{name:'Yaris Cross 1.5S',price:99900},{name:'Yaris Cross 1.5G',price:106900},{name:'Yaris Cross 1.5AV',price:114900}]},
+  {id:'yaris-cross-hev', name:'Yaris Cross HEV', type:'SUV Hybrid', cat:'suv|ev', price:109900, img:'', variants:[{name:'Yaris Cross HEV',price:109900},{name:'Yaris Cross HEV GR Sport',price:119900}]},
+  {id:'hilux', name:'Hilux', type:'Pickup', cat:'pickup', price:104880, img:'', variants:[{name:'Hilux Single Cab 2.4',price:104880},{name:'Hilux Double Cab 2.4E',price:117880},{name:'Hilux Double Cab 2.4V',price:148880},{name:'Hilux Double Cab 2.4V AWD',price:158880}]},
+  {id:'hilux-gr', name:'Hilux GR Sport', type:'Pickup', cat:'pickup', price:173280, img:'', variants:[{name:'Hilux GR Sport 2.4',price:173280}]},
+  {id:'hiace', name:'Hiace', type:'Van', cat:'van', price:127800, img:'', variants:[{name:'Hiace 2.5D',price:127800}]},
+  {id:'corolla-cross', name:'Corolla Cross', type:'Crossover', cat:'crossover', price:133800, img:'', variants:[{name:'Corolla Cross 1.8V AT',price:133800},{name:'Corolla Cross 1.8S',price:138800}]},
+  {id:'corolla', name:'Corolla', type:'Sedan', cat:'sedan', price:144800, img:'', variants:[{name:'Corolla 1.8E',price:144800},{name:'Corolla 1.8G',price:154800},{name:'Corolla 1.8S',price:164800}]},
+  {id:'corolla-cross-hev', name:'Corolla Cross HEV', type:'Crossover Hybrid', cat:'crossover|ev', price:140800, img:'', variants:[{name:'Corolla Cross HEV 1.8',price:140800},{name:'Corolla Cross HEV GR Sport',price:148800}]},
+  {id:'corolla-gr', name:'Corolla GR Sport', type:'Sedan', cat:'sedan', price:149800, img:'', variants:[{name:'Corolla GR Sport',price:149800}]},
+  {id:'zenix', name:'Innova Zenix', type:'Crossover', cat:'crossover|mpv', price:165000, img:'', variants:[{name:'Innova Zenix 2.0E',price:165000},{name:'Innova Zenix 2.0G',price:178000},{name:'Innova Zenix 2.0V',price:195000}]},
+  {id:'new-hiace', name:'New Hiace', type:'Van', cat:'van', price:172000, img:'', variants:[{name:'New Hiace SLWB',price:172000}]},
+  {id:'zenix-hev', name:'Innova Zenix HEV', type:'Crossover Hybrid', cat:'crossover|ev', price:202000, img:'', variants:[{name:'Zenix HEV 2.0',price:202000}]},
+  {id:'fortuner', name:'Fortuner', type:'SUV', cat:'suv', price:195880, img:'', variants:[{name:'Fortuner 2.4L',price:195880},{name:'Fortuner 2.4L AWD',price:215880},{name:'Fortuner 2.8L AWD',price:235880}]},
+  {id:'camry', name:'Camry', type:'Sedan', cat:'sedan', price:221800, img:'', variants:[{name:'Camry 2.5E',price:221800},{name:'Camry 2.5V',price:241800}]},
+  {id:'bz4x', name:'bZ4X', type:'EV Crossover', cat:'crossover|ev', price:220000, img:'', variants:[{name:'bZ4X EV',price:220000}]},
+  {id:'hilux-bev', name:'Hilux BEV', type:'EV Pickup', cat:'pickup|ev', price:226300, img:'', variants:[{name:'Hilux BEV',price:226300}]},
+  {id:'camry-hev', name:'Camry HEV', type:'Sedan Hybrid', cat:'sedan|ev', price:248800, img:'', variants:[{name:'Camry HEV 2.5',price:248800}]},
+  {id:'urban-cruiser', name:'Urban Cruiser', type:'EV Crossover', cat:'crossover|ev', price:198000, img:'', variants:[{name:'Urban Cruiser EV',price:198000}]},
+  {id:'harrier-hev', name:'Harrier HEV', type:'SUV Hybrid', cat:'suv|ev', price:289000, img:'', variants:[{name:'Harrier HEV',price:289000}]},
+  {id:'gr86', name:'GR86', type:'Coupe', cat:'coupe', price:296000, img:'https://www.toyota.com.my/content/dam/malaysia/models/gr-86/explore-thumbnails/toyota-gr-86-navi.png', variants:[{name:'GR86 2.4',price:296000}]},
+  {id:'gr-yaris', name:'GR Yaris', type:'Hatchback', cat:'hatchback|performance', price:315600, img:'https://www.toyota.com.my/content/dam/malaysia/models/gr-yaris/explore-thumbnails/explore-thumbnail-precious-metal-gr-yaris-v2.png', variants:[{name:'GR Yaris 1.6T',price:315600}]},
+  {id:'gr-corolla', name:'GR Corolla', type:'Hatchback', cat:'hatchback|performance', price:368950, img:'https://www.toyota.com.my/content/dam/malaysia/models/gr-corolla/explore-thumbnails/toyota-gr-corolla-navi-v2.png', variants:[{name:'GR Corolla 1.6T',price:368950}]},
+  {id:'vellfire', name:'Vellfire', type:'MPV', cat:'mpv', price:448000, img:'', variants:[{name:'Vellfire 2.5',price:448000}]},
+  {id:'alphard', name:'Alphard', type:'MPV', cat:'mpv', price:548000, img:'', variants:[{name:'Alphard 2.5',price:548000}]},
+  {id:'vellfire-hev', name:'Vellfire HEV', type:'MPV Hybrid', cat:'mpv|ev', price:549900, img:'', variants:[{name:'Vellfire HEV 2.5',price:549900}]},
+  {id:'gr-supra', name:'GR Supra', type:'Coupe', cat:'coupe|performance', price:560000, img:'https://www.toyota.com.my/content/dam/malaysia/models/gr-supra/explore-thumbnail/gr-supra-navi-v3.png', variants:[{name:'GR Supra Track Edition',price:560000}]}
+];
+
+// ── State ─────────────────────────────────────────────────────────
+let lang = 'bm';
+let filter = 'all';
+
+// ── Calculator ───────────────────────────────────────────────────
+function calcAll() {
+  const salary = parseFloat(document.getElementById('salary').value) || 0;
+  const years = parseInt(document.getElementById('tenure').value);
+  const rate = parseFloat(document.getElementById('rate').value) / 100;
+  const dpPct = parseInt(document.getElementById('dp').value) / 100;
+
+  const maxMonthly = salary * 0.3;
+  const totalMonths = years * 12;
+  const flatRate = rate * years;
+  // maxLoan = maxMonthly * totalMonths / (1 + flatRate)
+  const maxLoan = maxMonthly * totalMonths / (1 + flatRate);
+  const totalLoan = maxLoan + (maxLoan * flatRate);
+  const downPayment = maxLoan * dpPct / (1 - dpPct);
+
+  document.getElementById('maxLoan').textContent = Math.round(maxLoan).toLocaleString();
+  document.getElementById('dMonthly').textContent = 'RM' + Math.round(maxMonthly).toLocaleString();
+  document.getElementById('dDown').textContent = 'RM' + Math.round(downPayment).toLocaleString();
+  document.getElementById('dTotal').textContent = 'RM' + Math.round(totalLoan).toLocaleString();
+
+  document.getElementById('summary').classList.add('active');
+  renderModels(salary, years, rate, dpPct);
+}
+
+// ── Eligibility ──────────────────────────────────────────────────
+function calcEligibility(price, salary, years, rate, dpPct) {
+  const dp = price * dpPct;
+  const loanAmount = price - dp;
+  const totalInterest = loanAmount * rate * years;
+  const monthly = (loanAmount + totalInterest) / (years * 12);
+  const eligible = monthly <= salary * 0.3;
+  return { monthly, eligible, dp, total: loanAmount + totalInterest };
+}
+
+// ── Render Models ────────────────────────────────────────────────
+function renderModels(salary, years, rate, dpPct) {
+  const grid = document.getElementById('models');
+  let html = '';
+  let countLulus = 0, countGagal = 0;
+
+  MODELS.forEach((m, i) => {
+    const result = calcEligibility(m.price, salary, years, rate, dpPct);
+    const status = result.eligible ? 'lulus' : 'gagal';
+    const label = result.eligible ? (lang==='bm'?'✅ Lulus':'✅ Eligible') : (lang==='bm'?'❌ Gagal':'❌ Not Eligible');
+    if (result.eligible) countLulus++; else countGagal++;
+
+    let show = true;
+    if (filter === 'lulus') show = result.eligible;
+    else if (filter === 'gagal') show = !result.eligible;
+    else if (filter !== 'all') {
+      const cats = m.cat.split('|');
+      show = cats.includes(filter);
+    }
+
+    if (!show) return;
+
+    html += `
+    <div class="model-card" onclick="openDetail(${i})" data-status="${status}">
+      <div class="img-wrap">
+        <img src="${m.img}" alt="${m.name}" onerror="this.parentElement.querySelector('.fallback').style.display='flex';this.style.display='none'" loading="lazy">
+        <div class="fallback" style="display:none">${m.name[0]}</div>
+        <div class="badge badge-${status}">${label}</div>
+      </div>
+      <div class="model-name">${m.name}</div>
+      <div class="model-type">${m.type}</div>
+      <div class="model-price"><span class="from">from </span>RM${m.price.toLocaleString()}</div>
+    </div>`;
+  });
+
+  if (!html) html = '<div class="no-results active">' + (lang==='bm'?'Tiada model yang sepadan':'No matching models') + '</div>';
+  grid.innerHTML = html;
+
+  document.getElementById('countLulus').textContent = countLulus;
+  document.getElementById('countGagal').textContent = countGagal;
+}
+
+// ── Detail Panel ─────────────────────────────────────────────────
+function openDetail(idx) {
+  const m = MODELS[idx];
+  const salary = parseFloat(document.getElementById('salary').value) || 0;
+  const years = parseInt(document.getElementById('tenure').value);
+  const rate = parseFloat(document.getElementById('rate').value) / 100;
+  const dpPct = parseInt(document.getElementById('dp').value) / 100;
+  const result = calcEligibility(m.price, salary, years, rate, dpPct);
+
+  document.getElementById('dImg').src = m.img;
+  document.getElementById('dName').textContent = m.name;
+  document.getElementById('dType').textContent = m.type;
+  document.getElementById('dPrice').textContent = m.price.toLocaleString();
+  
+  const statusEl = document.getElementById('dStatus');
+  if (result.eligible) {
+    statusEl.textContent = lang==='bm'?'✅ Lulus — RM' + Math.round(result.monthly).toLocaleString() + '/bln':'✅ Eligible — RM' + Math.round(result.monthly).toLocaleString() + '/mo';
+    statusEl.style.background = '#34c75920';
+    statusEl.style.color = '#34c759';
+  } else {
+    statusEl.textContent = lang==='bm'?'❌ Gagal — RM' + Math.round(result.monthly).toLocaleString() + '/bln (maks RM' + Math.round(salary*0.3).toLocaleString() + ')':'❌ Not Eligible — RM' + Math.round(result.monthly).toLocaleString() + '/mo (max RM' + Math.round(salary*0.3).toLocaleString() + ')';
+    statusEl.style.background = '#ff950020';
+    statusEl.style.color = '#ff9500';
+  }
+
+  // Variants
+  let vHtml = '';
+  m.variants.forEach(v => {
+    const vResult = calcEligibility(v.price, salary, years, rate, dpPct);
+    const vStatus = vResult.eligible ? (lang==='bm'?'✅ Lulus':'✅ E') : (lang==='bm'?'❌ Gagal':'❌ N');
+    vHtml += `<li><span class="v-name">${v.name}</span><span><span class="v-price">RM${v.price.toLocaleString()}</span> <span class="v-status" style="background:${vResult.eligible?'#34c75920':'#ff950020'};color:${vResult.eligible?'#34c759':'#ff9500'}">${vStatus}</span></span></li>`;
+  });
+  document.getElementById('variants').innerHTML = vHtml;
+
+  document.getElementById('overlay').classList.add('active');
+  document.getElementById('panel').classList.add('active');
+}
+
+function closeDetail() {
+  document.getElementById('overlay').classList.remove('active');
+  document.getElementById('panel').classList.remove('active');
+}
+
+// ── Filters ──────────────────────────────────────────────────────
+function setFilter(el, f) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  filter = f;
+  calcAll();
+}
+
+// ── WhatsApp ─────────────────────────────────────────────────────
+function sendWA() {
+  const name = document.getElementById('dName').textContent;
+  const price = document.getElementById('dPrice').textContent;
+  const salary = document.getElementById('salary').value;
+  const msg = encodeURIComponent(`Hi, saya nak inquiry Toyota ${name} (RM${price}). Pendapatan saya RM${salary}/bulan. Boleh bantu?`);
+  window.open(`https://wa.me/60138077961?text=${msg}`, '_blank');
+}
+
+// ── Language Toggle ──────────────────────────────────────────────
+function toggleLang() {
+  lang = lang === 'bm' ? 'en' : 'bm';
+  document.querySelector('.lang-toggle').textContent = lang === 'bm' ? 'EN' : 'BM';
+  document.querySelectorAll('[data-bm],[data-en]').forEach(el => {
+    if (el.tagName === 'INPUT' || el.tagName === 'SELECT') return;
+    el.textContent = el.getAttribute('data-' + lang) || el.textContent;
+  });
+  calcAll();
+}
+
+// ── Init ─────────────────────────────────────────────────────────
+calcAll();
+</script>
+</body>
+</html>
