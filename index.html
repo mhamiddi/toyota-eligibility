@@ -1,192 +1,279 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Toyota Malaysia — Semak Kelayakan</title>
-<meta name="description" content="Semak kelayakan loan kereta Toyota Malaysia. HP calculator, model prices, variants.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>">
+<title>Toyota Malaysia — Semak Kelayakan Pinjaman</title>
+<meta name="description" content="Semak kelayakan pinjaman kereta Toyota Malaysia. HP calculator, model prices, variants.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--red:#EB0A1E;--red-dark:#B80A1E;--grad:linear-gradient(135deg,#EB0A1E,#CC0013);--bg:#f5f5f7;--card:#fff;--text:#1d1d1f;--text2:#6e6e73;--green:#34c759;--orange:#ff9500}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
-/* Header */
-.header{background:var(--grad);color:#fff;padding:48px 20px 32px;text-align:center;position:relative;overflow:hidden}
-.header::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 40%,rgba(255,255,255,0.08) 0%,transparent 60%);pointer-events:none}
-.header h1{font-size:28px;font-weight:700;letter-spacing:-0.5px;position:relative;z-index:1}
-.header p{font-size:14px;opacity:.8;margin-top:6px;position:relative;z-index:1;line-height:1.4}
-.header .logo{width:60px;height:60px;margin:0 auto 12px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;position:relative;z-index:1}
-/* Toggle BM/EN */
-.lang-toggle{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:4px 12px;border-radius:16px;font-size:12px;cursor:pointer;font-weight:500;z-index:2}
-.lang-toggle:active{transform:scale(.95)}
-/* Calculator */
-.calc{background:var(--card);margin:-20px 16px 0;border-radius:16px;padding:20px;box-shadow:0 4px 24px rgba(0,0,0,0.06);position:relative;z-index:2}
-.calc label{font-size:13px;font-weight:600;color:var(--text2);display:block;margin-bottom:4px}
-.calc .input-group{position:relative;margin-bottom:14px}
-.calc .input-group .prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;font-weight:600;color:var(--text2);pointer-events:none}
-.calc input,.calc select{width:100%;padding:12px 14px;font-size:16px;border:1.5px solid #e5e5ea;border-radius:12px;background:#fafafa;outline:none;transition:border-color .2s;appearance:none;-webkit-appearance:none}
-.calc input:focus,.calc select:focus{border-color:var(--red);background:#fff}
-.calc input[type=number]{padding-left:32px}
-.calc .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-/* Result summary */
-.summary{background:var(--grad);margin:16px 16px 0;border-radius:16px;padding:16px 20px;color:#fff;display:none}
-.summary.active{display:block;animation:fadeUp .3s ease}
-.summary .big{font-size:32px;font-weight:700;letter-spacing:-1px}
-.summary .big .currency{font-size:18px;font-weight:400;opacity:.8}
-.summary .details{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
-.summary .detail-item{text-align:center}
-.summary .detail-item .num{font-size:18px;font-weight:600}
-.summary .detail-item .lbl{font-size:11px;opacity:.7;margin-top:2px}
-/* Filter chips */
-.filters{display:flex;gap:8px;padding:12px 16px 4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.filters::-webkit-scrollbar{display:none}
-.chip{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;border:1.5px solid #e5e5ea;background:var(--card);cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0}
-.chip.active{background:var(--red);color:#fff;border-color:var(--red)}
-.chip:active{transform:scale(.95)}
-.chip-count{font-size:11px;opacity:.6;margin-left:4px}
-/* Model grid */
-.models{padding:8px 16px 100px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.model-card{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.04);transition:all .2s;cursor:pointer;position:relative}
-.model-card:active{transform:scale(.97)}
-.model-card .img-wrap{width:100%;aspect-ratio:16/10;background:#f0f0f5;position:relative;overflow:hidden}
-.model-card .img-wrap img{width:100%;height:100%;object-fit:cover}
-.model-card .img-wrap .fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px;opacity:.15;font-weight:800;color:var(--red)}
-.model-card .model-name{font-size:14px;font-weight:600;padding:8px 12px 2px}
-.model-card .model-type{font-size:11px;color:var(--text2);padding:0 12px}
-.model-card .model-price{font-size:15px;font-weight:700;padding:4px 12px 8px;color:var(--red)}
-.model-card .model-price .from{font-size:11px;font-weight:400;color:var(--text2)}
-.model-card .badge{position:absolute;top:8px;right:8px;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:600;color:#fff}
-.badge-lulus{background:var(--green)}
-.badge-gagal{background:var(--orange)}
-.badge-info{background:rgba(0,0,0,0.5);backdrop-filter:blur(4px)}
-/* Detail panel */
-.detail-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;display:none;animation:fadeIn .2s}
-.detail-overlay.active{display:block}
-.detail-panel{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-radius:20px 20px 0 0;z-index:101;max-height:85vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);padding:20px}
-.detail-panel.active{transform:translateY(0)}
-.detail-panel .handle{width:36px;height:4px;background:#e5e5ea;border-radius:2px;margin:0 auto 16px}
-.detail-panel .d-header{display:flex;gap:12px;margin-bottom:16px}
-.detail-panel .d-img{width:120px;height:80px;border-radius:10px;background:#f0f0f5;flex-shrink:0;overflow:hidden}
-.detail-panel .d-img img{width:100%;height:100%;object-fit:cover}
-.detail-panel .d-info{flex:1}
-.detail-panel .d-name{font-size:18px;font-weight:700}
-.detail-panel .d-type{font-size:13px;color:var(--text2);margin-top:2px}
-.detail-panel .d-price{font-size:22px;font-weight:700;color:var(--red);margin-top:4px}
-.detail-panel .d-price .from{font-size:12px;font-weight:400;color:var(--text2)}
-.detail-panel .d-status{padding:6px 12px;border-radius:8px;font-size:13px;font-weight:600;display:inline-block;margin-top:6px}
-/* Variants */
-.variants{list-style:none}
-.variants li{padding:12px 0;border-bottom:1px solid #f0f0f5;display:flex;justify-content:space-between;align-items:center}
-.variants li:last-child{border-bottom:none}
-.variants .v-name{font-size:14px;font-weight:500}
-.variants .v-price{font-size:14px;font-weight:600;color:var(--red)}
-.variants .v-status{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:500}
-/* WhatsApp */
-.whatsapp-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;background:#25D366;color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:600;cursor:pointer;margin-top:16px;transition:opacity .2s;text-decoration:none}
-.whatsapp-btn:active{opacity:.8}
-/* No results */
-.no-results{text-align:center;padding:40px 20px;color:var(--text2);display:none;grid-column:1/-1}
-.no-results.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@media(max-width:400px){.models{grid-template-columns:1fr}}
+:root{
+  --t-red:#EB0A1E;
+  --t-red-dk:#C00918;
+  --t-black:#1a1a1a;
+  --t-g1:#f6f7f9;
+  --t-g2:#eeeff2;
+  --t-g3:#d2d4da;
+  --t-g4:#999;
+  --t-white:#fff;
+  --t-border:#e0e2e8;
+  --t-text:#1a1a1a;
+  --t-muted:#666;
+  --t-green:#1aa85f;
+  --t-amber:#d98200;
+  --t-r:3px;
+  --t-shadow:0 4px 24px rgba(0,0,0,0.07);
+}
+body{font-family:'Montserrat',sans-serif;background:var(--t-g1);color:var(--t-text);min-height:100vh;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;align-items:center}
+
+/* ── WRAPPER ── */
+.tw-wrap{width:100%;max-width:820px;padding:40px 20px 80px}
+
+/* ── HEADER ── */
+.tw-header{text-align:center;margin-bottom:40px}
+.tw-logo{display:flex;justify-content:center;margin-bottom:16px}
+.tw-logo svg{width:80px;height:48px;color:var(--t-red)}
+.tw-title{font-size:clamp(22px,4vw,34px);font-weight:800;color:var(--t-black);line-height:1.15;letter-spacing:-0.5px;margin-bottom:8px}
+.tw-subtitle{font-size:13px;font-weight:400;color:var(--t-muted);line-height:1.6;max-width:440px;margin:0 auto}
+
+/* ── STEP LABEL ── */
+.tw-step{display:inline-flex;align-items:center;gap:8px;justify-content:center;margin-bottom:18px}
+.tw-step-num{width:24px;height:24px;background:var(--t-red);color:#fff;font-size:11px;font-weight:800;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
+.tw-step-text{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t-black)}
+
+/* ── CARD ── */
+.tw-card{background:var(--t-white);border:1px solid var(--t-border);border-top:3px solid var(--t-red);padding:28px 24px;margin-bottom:16px;box-shadow:var(--t-shadow);text-align:left;width:100%}
+
+/* ── GRID ── */
+.tw-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%}
+.tw-full{grid-column:1/-1}
+@media(max-width:580px){.tw-grid{grid-template-columns:1fr}}
+
+/* ── FIELD ── */
+.tw-field{display:flex;flex-direction:column;gap:6px;width:100%}
+.tw-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t-black);display:block}
+
+/* ── SELECT ── */
+.tw-sw{position:relative;width:100%;display:block}
+.tw-sw::after{content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--t-black);pointer-events:none;z-index:1}
+.tw-sw select{width:100%;background:var(--t-g1);border:1.5px solid var(--t-border);color:var(--t-text);font-family:'Montserrat',sans-serif;font-size:14px;font-weight:500;padding:13px 42px 13px 14px;border-radius:var(--t-r);outline:none;transition:border-color .2s,background .2s;-webkit-appearance:none;-moz-appearance:none;appearance:none;cursor:pointer;display:block;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
+.tw-sw select:focus{border-color:var(--t-red);background:#fff}
+
+/* ── INPUT ── */
+.tw-input{width:100%;background:var(--t-g1);border:1.5px solid var(--t-border);color:var(--t-text);font-family:'Montserrat',sans-serif;font-size:14px;font-weight:500;padding:13px 14px;border-radius:var(--t-r);outline:none;transition:border-color .2s;display:block;-webkit-appearance:none;appearance:none}
+.tw-input:focus{border-color:var(--t-red);background:#fff}
+.tw-input::placeholder{color:var(--t-g4)}
+
+/* ── PRICE PREVIEW ── */
+.tw-pprev{display:flex;align-items:center;justify-content:space-between;background:#fff5f5;border:1.5px solid #fcc;border-left:4px solid var(--t-red);padding:14px 16px;border-radius:var(--t-r);flex-wrap:wrap;gap:8px;width:100%}
+.tw-pprev-lbl{font-size:11px;font-weight:600;color:var(--t-muted);text-transform:uppercase;letter-spacing:.8px;line-height:1.4}
+.tw-pprev-val{font-size:20px;font-weight:800;color:var(--t-red);white-space:nowrap}
+
+/* ── BUTTON ── */
+.tw-btn{width:100%;background:var(--t-red);color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:17px;border:none;border-radius:var(--t-r);cursor:pointer;transition:background .2s,transform .1s;margin-top:8px;display:block;line-height:1}
+.tw-btn:hover{background:var(--t-red-dk)}
+.tw-btn:active{transform:scale(.99)}
+
+/* ── RESULTS ── */
+.tw-results{display:none;border:1px solid var(--t-border);border-top:3px solid var(--t-black);box-shadow:var(--t-shadow);overflow:hidden;width:100%;text-align:left}
+.tw-results.show{display:block;animation:twUp .4s ease}
+@keyframes twUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.tw-hero{background:var(--t-red);color:#fff;text-align:center;padding:36px 20px 32px}
+.tw-hero-lbl{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:10px}
+.tw-hero-amt{line-height:1}
+.tw-hero-amt .tw-rm{font-size:clamp(16px,3vw,22px);font-weight:600;color:rgba(255,255,255,.7);vertical-align:top;margin-top:8px;display:inline-block;margin-right:3px}
+.tw-hero-amt .tw-num{font-size:clamp(38px,9vw,56px);font-weight:800;color:#fff;letter-spacing:-2px}
+.tw-hero-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:10px;font-weight:500;letter-spacing:.8px}
+
+.tw-body{padding:0 24px;background:#fff}
+@media(max-width:580px){.tw-body{padding:0 16px}}
+
+.tw-rrow{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--t-g2);gap:12px}
+.tw-rrow:last-of-type{border-bottom:none}
+.tw-rl{font-size:12px;font-weight:500;color:var(--t-muted);flex-shrink:0}
+.tw-rv{font-size:13px;font-weight:700;color:var(--t-black);text-align:right}
+.tw-rv.tw-red{color:var(--t-red)}
+
+/* ── FILTERS / MODELS SECTION ── */
+.tw-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.tw-section-hdr h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--t-black)}
+.tw-lang-btn{background:var(--t-g2);border:1px solid var(--t-border);color:var(--t-text);padding:5px 12px;border-radius:var(--t-r);font-size:10px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;letter-spacing:1px;transition:all .2s}
+.tw-lang-btn:hover{background:var(--t-red);color:#fff;border-color:var(--t-red)}
+
+.tw-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tw-chip{padding:5px 12px;border-radius:var(--t-r);font-size:11px;font-weight:600;border:1.5px solid var(--t-border);background:var(--t-white);cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0;font-family:'Montserrat',sans-serif}
+.tw-chip.active{background:var(--t-red);color:#fff;border-color:var(--t-red)}
+.tw-chip:active{transform:scale(.97)}
+.tw-chip-count{font-size:10px;opacity:.6;margin-left:3px;font-weight:500}
+
+.tw-models{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:400px){.tw-models{grid-template-columns:1fr}}
+
+.tw-mcard{background:var(--t-white);border:1px solid var(--t-border);overflow:hidden;cursor:pointer;transition:box-shadow .2s,transform .15s;position:relative}
+.tw-mcard:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.tw-mcard:active{transform:scale(.98)}
+.tw-mcard .tw-img{width:100%;aspect-ratio:16/10;background:var(--t-g1);position:relative;overflow:hidden}
+.tw-mcard .tw-img img{width:100%;height:100%;object-fit:cover}
+.tw-mcard .tw-img .tw-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;color:#ddd;background:var(--t-g1)}
+.tw-mcard .tw-badge{position:absolute;top:8px;right:8px;padding:3px 8px;font-size:10px;font-weight:700;color:#fff;letter-spacing:.5px}
+.tw-badge-lulus{background:var(--t-green)}
+.tw-badge-gagal{background:var(--t-amber)}
+.tw-mcard .tw-mname{font-size:14px;font-weight:600;padding:8px 12px 2px}
+.tw-mcard .tw-mtype{font-size:11px;color:var(--t-muted);padding:0 12px}
+.tw-mcard .tw-mprice{font-size:15px;font-weight:700;padding:4px 12px 10px;color:var(--t-red)}
+.tw-mcard .tw-mprice .tw-from{font-size:10px;font-weight:400;color:var(--t-muted)}
+
+.tw-noresult{text-align:center;padding:40px 20px;color:var(--t-muted);display:none;grid-column:1/-1;font-size:13px}
+.tw-noresult.show{display:block}
+
+/* ── DETAIL PANEL ── */
+.tw-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;display:none;animation:twFade .2s}
+.tw-overlay.active{display:block}
+.tw-panel{position:fixed;bottom:0;left:0;right:0;background:var(--t-white);z-index:101;max-height:82vh;overflow-y:auto;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1)}
+.tw-panel.active{transform:translateY(0)}
+.tw-panel-inner{padding:0 24px 24px}
+@media(max-width:580px){.tw-panel-inner{padding:0 16px 20px}}
+.tw-panel .tw-handle{width:36px;height:4px;background:var(--t-g3);border-radius:2px;margin:10px auto 16px}
+.tw-panel .tw-p-header{display:flex;gap:14px;margin-bottom:16px}
+.tw-panel .tw-p-img{width:120px;height:80px;border-radius:var(--t-r);background:var(--t-g1);flex-shrink:0;overflow:hidden}
+.tw-panel .tw-p-img img{width:100%;height:100%;object-fit:cover}
+.tw-panel .tw-p-info{flex:1}
+.tw-panel .tw-p-name{font-size:18px;font-weight:700}
+.tw-panel .tw-p-type{font-size:12px;color:var(--t-muted);margin-top:2px}
+.tw-panel .tw-p-price{font-size:20px;font-weight:700;color:var(--t-red);margin-top:4px}
+.tw-panel .tw-p-price .tw-from{font-size:12px;font-weight:400;color:var(--t-muted)}
+.tw-panel .tw-p-status{font-size:12px;font-weight:600;display:inline-block;margin-top:6px;border-radius:var(--t-r)}
+
+.tw-vlist{list-style:none}
+.tw-vlist li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--t-g2);gap:8px;font-size:13px}
+.tw-vlist li:last-child{border-bottom:none}
+.tw-vlist .tw-vn{font-weight:500;flex-shrink:0}
+.tw-vlist .tw-vv{font-weight:600;color:var(--t-red);white-space:nowrap}
+.tw-vlist .tw-vs{font-size:10px;padding:2px 6px;border-radius:2px;font-weight:600;margin-left:6px}
+
+.tw-wa{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:#25D366;color:#fff;border:none;border-radius:var(--t-r);font-size:12px;font-weight:700;cursor:pointer;margin-top:14px;transition:opacity .2s;text-decoration:none;font-family:'Montserrat',sans-serif;letter-spacing:.5px}
+.tw-wa:active{opacity:.8}
+
+@keyframes twFade{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="header">
-  <button class="lang-toggle" onclick="toggleLang()">BM</button>
-  <div class="logo">T</div>
-  <h1><span data-en="Toyota Eligibility Checker" data-bm="Semak Kelayakan Toyota">Semak Kelayakan Toyota</span></h1>
-  <p><span data-en="Check your loan eligibility for any Toyota model" data-bm="Semak kelayakan loan untuk mana-mana model Toyota">Semak kelayakan loan untuk mana-mana model Toyota</span></p>
-</div>
+<div class="tw-wrap">
 
-<!-- Calculator -->
-<div class="calc">
-  <div class="row">
-    <div class="input-group">
-      <label data-en="Monthly Income" data-bm="Pendapatan Bulanan">Pendapatan Bulanan</label>
-      <span class="prefix">RM</span>
-      <input type="number" id="salary" value="5000" min="1000" max="100000" step="500" oninput="calcAll()">
+  <!-- HEADER -->
+  <div class="tw-header">
+    <div class="tw-logo">
+      <svg viewBox="0 0 922.7 538.88" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+        <path d="M527.04,9.36C508.76,3.47,486.01,0,461.36,0s-47.42,3.47-65.71,9.36c-48.63,15.64-82.04,48.09-82.04,85.62,0,52.78,66.14,95.58,147.75,95.58s147.72-42.8,147.72-95.58c0-37.53-33.41-69.98-82.04-85.62m-65.68,140.1c-12.18,0-22.13-23.94-22.71-54.03,7.32,.66,14.92,1.02,22.71,1.02s15.36-.35,22.7-1.02c-.59,30.09-10.53,54.03-22.7,54.03m-21.17-77.58c3.32-21.11,11.54-36.07,21.17-36.07s17.83,14.96,21.15,36.07c-6.76,.62-13.85,.95-21.15,.95s-14.4-.33-21.17-.95m55.26-1.59c-4.94-33.14-18.34-56.9-34.09-56.9s-29.16,23.76-34.11,56.9c-30.01-4.69-50.99-15.35-50.99-27.78,0-16.73,38.1-30.3,85.1-30.3s85.07,13.56,85.07,30.3c0,12.43-20.97,23.09-50.98,27.78m-160.28,21.19c0-16.19,6.22-31.35,17.09-44.4-.12,.91-.19,1.82-.19,2.73,0,20.36,30.57,37.67,73.2,44.02-.03,1.53-.06,3.08-.06,4.63,0,37.84,10.5,69.9,25.02,80.95-64.49-3.94-115.06-41.8-115.06-87.94m137.3,87.94c14.51-11.05,25-43.1,25-80.95,0-1.55-.02-3.1-.06-4.63,42.62-6.36,73.19-23.67,73.19-44.02,0-.91-.06-1.83-.19-2.73,10.86,13.05,17.09,28.21,17.09,44.4,0,46.14-50.57,84-115.04,87.94m-153.79,52.59h-21.17v54.05s-15.01,0-15.01,0v-54.05s-21.16,0-21.16,0v-12.68h57.34v12.68Zm38.72-14.68c-19.53,0-35.37,15.84-35.37,35.37s15.84,35.36,35.37,35.36,35.37-15.84,35.37-35.36-15.84-35.37-35.37-35.37m17.34,46.07c-2.3,5.85-7.53,10.23-13.85,11.35-1.12,.19-2.29,.31-3.48,.31s-2.35-.11-3.47-.31c-6.34-1.12-11.56-5.5-13.85-11.35-1.31-3.31-2.03-6.92-2.03-10.7s.72-7.39,2.03-10.71c2.29-5.84,7.52-10.22,13.85-11.33,1.12-.21,2.29-.31,3.47-.31s2.36,.1,3.48,.31c6.33,1.11,11.56,5.49,13.85,11.33,1.3,3.32,2.02,6.93,2.02,10.71s-.71,7.4-2.02,10.7m18.27-44.07h17.69l16.51,28.69,16.52-28.69h17.67l-26.68,42.04v24.69h-15.01v-24.69l-26.7-42.04Zm68.67,33.36c0-19.53,15.83-35.36,35.37-35.36s35.36,15.83,35.36,35.36-15.83,35.37-35.36,35.37-35.37-15.84-35.37-35.37m35.37,22.36c1.18,0,2.35-.11,3.47-.31,6.34-1.11,11.55-5.5,13.85-11.33,1.3-3.32,2.02-6.93,2.02-10.72s-.72-7.39-2.02-10.7c-2.3-5.84-7.51-10.23-13.85-11.34-1.13-.19-2.3-.31-3.47-.31s-2.36,.12-3.48,.31c-6.33,1.11-11.57,5.5-13.85,11.34-1.31,3.31-2.03,6.93-2.03,10.7s.72,7.4,2.03,10.72c2.28,5.84,7.52,10.22,13.85,11.33,1.13,.19,2.3,.31,3.48,.31m142.12-3.72h-28.4s-5.47,14.68-5.47,14.68h-16.69l27.02-66.72h18.67l27.04,66.72h-16.68l-5.49-14.67h0Zm-4.36-11.69l-9.82-26.35-9.84,26.35h19.67Zm-41.79-27.64h-21.16v54.05h-15.01v-54.05s-21.16,0-21.16,0v-12.68h57.33v12.68Zm328.67,140.23c-.87-1.09-2.28-1.53-4.2-1.29l-.09,.02c-3.7,1.48-5.8,6.21-7.66,10.39l-.41,.91c-3.85,8.57-6.8,16.24-9.28,24.13-.52,1.66-1,3.3-1.47,4.91-1.74,5.98-3.38,11.65-6.66,15.39-.27-3.25-2.05-6.02-4.88-7.52-3.16-1.68-6.91-1.42-9.99,.68-5.57,3.27-8.85,8.67-12.02,13.89-.73,1.21-1.47,2.41-2.23,3.6-.16,.24-19.46,25.42-29.2,29.62-1.09-1.84-1.64-4.57-1.64-8.12,.03-14.47,4.43-27.85,8.55-39.25,5.66-15.67,10.56-25.01,13.48-30.59,2.41-4.6,3.63-6.91,3.1-8.56-.24-.76-.83-1.35-1.92-1.9-3.41-1.74-6.6,3.48-8.14,5.99-5.68,9.29-10.27,21.01-13.23,29.02l-.24,.67c-4.03,11.44-10.13,28.73-9.97,45.54,.03,3.6,.73,12.27,6.49,14.96,7.05,3.29,14.57-5.36,21.2-12.99,1.84-2.12,3.6-4.14,5.24-5.78-.94,5.98,.52,12.51,6.12,13.67,.1,0,.22,0,.35,.01,2.22,.11,8.08,.36,20.09-14.51,.9-1.12,1.7-2.3,2.46-3.45,.64-.96,1.25-1.87,1.85-2.62,.64,.24,1.6,.31,2.39,.13-.12,.91-.27,1.91-.42,2.96-1.32,8.92-3.13,21.14,4.45,23.72l.11,.02c.09,0,.18,0,.27,0,3.14,0,4.86-1.64,4.97-4.75,.09-1.44-.78-2.02-1.48-2.48-.47-.31-.89-.59-1.07-1.08-.2-13.41,2.64-25.13,5.39-36.46,.68-2.79,1.38-5.67,2.01-8.51,3.84-6.73,7.14-14.16,10.33-21.35l1.01-2.27,.15-.37c1.52-3.8,3.25-8.1,4.72-12.39l.24-.69c1.19-3.35,3.66-10.32,1.26-13.32Zm-37.64,66.83l-.98,1.47c-5.04,7.59-10.26,15.44-18.25,20.26-.33-7.33,2.68-14.07,5.56-19.84,3.65-7.31,7.73-12.09,12.47-14.61,1.33,1.99,1.27,5.53,1.2,8.96-.02,1.25-.05,2.55,0,3.76Zm-164.91-27.1c3.64,4.7-4.47,32.41-4.56,32.69-3.39,11.25-9.06,25.25-16.84,28.03-2.6,.93-5.26,.51-7.89-1.26l-.07-.07c-6.18-7.23-6.33-20.53-6.34-33.56-4.24,4.88-8.18,10.55-11.99,16.05-7.94,11.44-14.82,21.35-22.2,21.35-.15,0-.29,0-.44-.01l-.3-.02-.02-.14s-.07-.02-.11-.04c-.78-.28-2.86-1.01-3.85-4.95v-.05s0-.21,0-.21c.2-5.04,.62-15.53,16.01-48.16,.4-.85,.83-1.88,1.29-2.97,1.97-4.68,4.42-10.5,7.79-10.9,1.28-.15,2.5,.19,3.45,.96,.78,.64,1.29,1.53,1.35,2.38,.17,2.18-1.21,4.07-2.55,5.91-1.08,1.48-2.11,2.88-2.31,4.36-.06,.41,.07,.88,.2,1.37,.39,1.46,.88,3.26-3.06,4.88l-.65,1.49c-4.71,10.84-9.58,22.04-12.64,34.8,5.76-6.01,10.95-13.46,15.97-20.67,2.33-3.35,4.74-6.81,7.18-10.09,.32-.44,.65-.89,.98-1.36,2.32-3.25,4.94-6.94,9.48-7.12,2.68,.25,4.4,2.65,4.77,6.58,.32,3.36,.31,7.26,.31,11.39,0,8.78-.02,17.85,3.1,22.39,4.29-3.79,6.55-9.79,8.74-15.6,.63-1.68,1.29-3.42,1.98-5.08l1.02-3.55c1.99-6.86,4.05-13.96,5.62-21.39-1.21-.85-1.74-2.16-1.51-3.73,.34-2.28,2.29-4.56,4.34-5.1,1.43-.37,2.75,.12,3.72,1.38Zm98.93,4.4c-3.27-1.57-6.83-.24-8.66,.7-9.21,4.71-15.92,15.89-21.32,24.86-.65,1.09-1.29,2.14-1.9,3.15,.63-2.37,1.31-4.71,1.98-6.98,.62-2.11,1.25-4.29,1.85-6.5,.21-.95,.65-2.15,1.11-3.42,1.29-3.51,2.89-7.88,.69-10.36-2.15-2.42-4.49-.62-6.38,.82-.61,.47-1.18,.91-1.74,1.22-7.61,4.31-17.34,6.79-30.6,7.81-1.69-5.12-3.93-8.21-6.87-9.46-3.49-1.02-7.1,.84-11.04,5.68-6.37,7.83-13.11,22.42-13.05,34.05,.03,6.91,2.96,11.19,7.82,11.45,4.53,.24,9.86-3,14.3-8.66,5.05-6.45,8.45-15.47,9.6-25.44,11.44-1.27,20.43-4.14,28.64-7.02-2.05,6.16-3.86,12.49-5.69,19.86-.1,.4-.21,.85-.34,1.35-1.33,5.15-3.8,14.74-1.19,18.93,.65,1.04,1.57,1.69,2.74,1.93,.45,.09,.88,.14,1.28,.14,3.91,0,5.79-4.33,8.71-11.08,1.77-4.1,3.98-9.2,7.29-14.93,.56-.9,1.12-1.81,1.67-2.72,4.67-7.63,9.49-15.52,18.15-19.3,.88,.56,1.28,1.61,1.7,2.71,.58,1.53,1.23,3.27,3.42,3.27,2.03,0,2.71-1.11,2.92-2.03,.72-3.14-2.83-8.92-5.08-10.01Zm-71.91,19.36c-2.33,13.4-7.13,21.48-15.06,25.36-1.53-9.81,2.61-17.86,6.27-24.98,.58-1.13,1.15-2.24,1.69-3.33,1.93,1.55,4.53,2.34,7.11,2.94Zm-148.63-13.92c-7.39,.82-11.93,4.74-16.32,8.53-1.35,1.16-2.63,2.27-3.97,3.26,.28-.8,.61-1.63,.94-2.45,1.16-2.9,2.35-5.9,1.44-7.97-.39-.89-1.15-1.55-2.26-1.96-.89-.33-1.75-.31-2.54,.06-2.34,1.11-3.7,5.08-4.9,8.59-.52,1.53-1.02,2.99-1.52,3.94-5.03,3.31-9.7,7.02-14.21,10.61-.88,.7-1.76,1.4-2.65,2.1-.7,.55-1.4,1.12-2.11,1.69-4.62,3.71-9.4,7.55-15.39,9.68-.2-7.17,1.67-13.82,3.19-19.19,1.76-6.23,3.03-10.74,.45-13.06-.93-.84-1.96-1.17-3.07-1-3.54,.56-6.81,6.21-7.88,8.07-.13,.23-.22,.39-.27,.46-5.35,7.92-11.41,16.9-18.49,24.27-.18,.19-.37,.39-.56,.59-.99,1.07-2.1,2.27-3.44,2.67,.43-10.26,4.25-19.88,7.33-27.63,3.22-8.1,5.55-13.96,1.87-15.88-2.39-1.25-6.66,1.28-12.06,4.48-6.07,3.6-13.62,8.07-20.47,8.08-1.99-3.41-4.41-6.63-8.48-7.41-6.05-1.15-10.45,3.83-14,7.83-1.14,1.28-2.21,2.49-3.21,3.36-1.25,1.02-2.49,2.05-3.73,3.09-3.21,2.67-6.54,5.44-9.93,8.02-4.41,3.31-8.91,6.91-13.26,10.39-4.36,3.49-8.86,7.08-13.17,10.31,.49-1.07,.98-2.14,1.47-3.22,8.17-17.9,16.62-36.41,10.06-40.25-3.19-1.87-7.99,1.38-13.86,9.37-2.42,2.57-4.78,5.28-7.06,7.9-7.33,8.4-14.91,17.09-25.41,22.55,.32-8.01,3.23-14.51,6.04-20.8,.98-2.19,1.99-4.46,2.87-6.73,2.87-.18,2.9-1.94,2.93-3.81,.01-.73,.02-1.49,.18-2.26,.14-.67,.51-1.25,.86-1.81,.59-.94,1.21-1.91,.75-3.23-.56-2.07-2-3.18-4.35-3.27-1.22,.23-2.22,.77-3.06,1.66-.66,.69-14.95,25.91-14.61,39.47,.12,4.84,2.27,8.09,6.12,9.15,5.32,.41,9.15-2.51,12.52-5.1l.7-.53c10.07-7.64,18.15-16.77,26.6-26.45-1,3.36-4.44,13.07-15.52,34.49-1.63,1.18-3.27,2.37-4.92,3.56-13.64,9.83-27.75,19.99-37.94,33.99-4.03,5.54-12.69,19.21-6.04,26.45,1.44,1.57,3.23,2.37,5.33,2.37,.33,0,.66-.02,1.01-.06,10.39-1.18,26.58-20.66,46.84-56.34,12.8-11.21,27.62-24.03,42.14-35.01-1.39,3.52-3.82,11.85-1.36,17.9,1.17,2.87,3.28,4.85,6.29,5.88l.1,.02c7.12,.32,11.94-3.48,15.33-6.82,6.15-6.07,10.84-16.07,12.57-26.8,8.19-1.02,14.54-4.77,20.15-8.08,1.24-.73,2.42-1.43,3.6-2.09-.6,1.45-1.3,3.03-2.03,4.68-3.65,8.24-8.19,18.51-7.35,28.59,.2,2.45,.95,5.74,3.35,7.47,1.61,1.16,3.71,1.45,6.25,.85,6.26-1.49,13.86-12.16,18.9-19.22,.94-1.33,1.8-2.52,2.54-3.51-1.19,6.17-2.06,14.15,1.78,17.92,5.82,4.13,11.06,.07,15.27-3.19l.68-.52c3.68-2.83,7.6-6.12,11.38-9.3,3.31-2.78,6.45-5.42,9.32-7.66-1.26,4.69-2.63,8.46-3.74,11.54-2.27,6.28-3.53,9.74-.04,11.37,.66,.31,1.42,.43,2.35,.37,2.28-.25,2.86-1.69,4.03-4.54,1.41-3.46,3.78-9.25,11.01-18.49,.56-.57,1.14-1.18,1.74-1.8,2.22-2.31,4.73-4.93,7.73-7.44,.35-.29,.72-.61,1.11-.95,2.94-2.54,6.97-6.02,10.88-5.45,.76,.11,1.43,.63,2.14,1.19,1.32,1.03,2.81,2.2,5.07,.6l.08-.08c.78-1.02,.81-2.29,.08-3.56-1.46-2.57-5.89-4.99-10.21-4.51Zm-124.91,16.02c-1.3,8.72-5.02,16.32-10.49,21.45-2.51,2.35-4.92,3.67-7.34,4.03-2.35-11.59,7.7-25.02,11.31-29.39,1.41,1.55,3.4,3.27,6.53,3.91Zm-79.36,51.18c-17.26,29.14-28.07,38.73-34.22,41.52,1.07-8.34,8-22.16,34.22-41.52Zm-59.73-41.86c-1.46-.82-3.88,.1-5.19,.72-9.16,4.34-19.33,8.29-19.41,8.32-.29,.09-.89,.31-1.73,.61-19.13,6.9-29.86,8.46-31.9,4.65-1.71-2.91-.53-7.96,.84-10.6,8.67-1.03,16.16-4.63,21.72-7.66,12.12-6.61,15.24-12.32,15.73-15.95,.34-2.54-.52-4.89-2.48-6.79-2.24-2.16-5.69-3.23-9.44-2.94-6.07,.47-15.97,4.55-28.7,21.28-3.14-.26-5.82,1.9-6.45,5.22-.12,1.63,.46,2.55,1.03,3.45,.2,.32,.39,.63,.55,.96-2.94,5.67-2.7,16.02,1.79,19.75,2.78,2.32,5.89,3.4,9.9,3.4,.62,0,1.27-.03,1.94-.08,6.24-.48,12.59-2.88,18.74-5.19,.97-.37,1.94-.73,2.9-1.08,15.62-5.76,20.6-8.46,24.24-10.44,.6-.33,1.17-.63,1.74-.93,.37-.19,.79-.38,1.23-.58,1.91-.86,4.28-1.92,4.06-4.18-.09-.92-.47-1.57-1.11-1.94Zm-51.87-5.9c3.64-5.52,11.86-16.31,20.68-16.78,1.9-.09,3.13,.25,3.97,1.12-1.19,3.55-4.15,5.27-7.28,7.09-1.32,.77-2.68,1.56-3.82,2.46-3.86,2.01-8.46,4.28-13.54,6.11Zm-141.37,20.21c-1.87,10.67-3.53,21.88-1.62,31.37,.04,.06,.04,.08,.6-.16,.82-.36,2.19-.95,3.83,.9,.99,1.12,1.08,2.75,.24,4.24-.92,1.63-3,3.08-5.55,2.62-9.32-2.7-8.21-16.22-7.48-25.17,2.27-27.66,9.53-51.96,16.55-75.46,.43-1.45,.86-2.89,1.29-4.32-11.15,12.8-21.99,27.15-32.49,41.03-7.87,10.41-16,21.17-24.32,31.36-.66,.8-1.32,1.64-2,2.49-2.58,3.23-5.24,6.57-8.22,9.35l-.24,.22c-3.41,3.19-9.77,9.12-15.62,7.5-1.66-.46-2.98-1.54-3.92-3.21-5.41-9.56,2.15-36.79,6.21-51.42,.55-1.98,1.03-3.71,1.4-5.11,2.74-10.44,6.03-20.72,9.2-30.67,1.51-4.73,3.07-9.62,4.58-14.52-1.14,1.08-2.13,2.5-3.17,3.99-.38,.55-.77,1.11-1.17,1.65-21.65,29.63-41.56,61.52-60.89,97.47-.86,1.6-1.68,3.42-2.56,5.34-.45,1-.91,2-1.37,2.98-.5,1.05-1.07,2.09-1.62,3.09-.98,1.77-1.9,3.44-2.29,4.95-.14,.56-.17,1.15-.2,1.77-.04,.92-.08,1.87-.53,2.71-.9,1.68-2.83,2.8-4.81,2.8h0c-1.7,0-3.14-.85-3.94-2.34l-.04-.1c-.66-3.43,.9-6.65,2.27-9.49,.26-.55,.52-1.08,.77-1.61,10.09-22.19,22.76-43.13,35.02-63.39l.21-.34c14.01-23.14,27.27-42.32,40.56-58.64l.15-.18c2.2-2.71,4.7-5.78,7.41-6.87,.91-.34,2.47-.5,3.89,.16,1.18,.55,2.02,1.53,2.52,2.92,1.23,3.43,.1,7.09-.91,10.32-.22,.71-.44,1.41-.62,2.09-2.38,8.66-5.01,17.32-7.55,25.7-4.06,13.38-8.25,27.21-11.67,41.69-.29,1.21-.58,2.42-.88,3.65-1.99,8.11-4.04,16.5-3.32,25.65,3.51-1.35,6.39-4.33,9.19-7.21,.97-1,1.98-2.04,2.98-2.97l1.3-1.4c3.26-3.5,6.63-7.12,9.55-11.06,10.13-11.78,19.93-24.23,29.4-36.28,4.09-5.21,8.33-10.59,12.53-15.85,.95-1.2,1.91-2.38,2.87-3.57,2.51-3.12,5.11-6.34,7.55-9.62,1.35-1.53,2.63-3.14,4-4.83,.44-.55,.89-1.11,1.34-1.66,.21-.26,.43-.54,.66-.84,1.56-2.01,3.49-4.48,6.12-4.39,1.25,.06,2.22,.57,2.87,1.49,2.01,2.83,.51,8.97-.23,11.48l-1.64,5.55c-5.99,20.3-12.19,41.28-16.19,64.12Zm136.9-51.08c-.14-.78-.58-1.41-1.28-1.84-.96-.58-2.3-.69-3.64-.28-4.85,2.43-20.29,20.11-29.05,30.41-3.85,3.93-7.49,8.37-11.01,12.67-5.1,6.22-10.36,12.65-16.3,17.55,1.24-10.64,4.53-19.8,7.71-28.66,1.2-3.33,2.43-6.78,3.53-10.23,.13-.42,.28-.86,.43-1.31,1.09-3.29,2.46-7.38,1.06-11.03-.44-1.14-1.18-1.94-2.2-2.36-2.7-1.11-6.56,.62-8.21,1.35l-.36,.16c-8.79,3.78-17.5,7.36-27.49,9.65-1.02-1.47-2.27-2.65-3.71-3.49,.28-3.21-1.33-4.52-2.75-5.05-3.5-1.32-9.11,.81-10.87,3.37-3.98,4.04-7.87,9.83-10.96,16.31-2.48,5.2-7.88,18.17-4.51,26.2,1.17,2.8,3.31,4.75,6.38,5.81,4.36,1.02,9.85-1.09,15.08-5.8,7.43-6.69,14.76-19.24,13.43-31.1,6.72-1.49,12.9-3.96,18.87-6.35,3.23-1.29,6.28-2.51,9.35-3.56-1.05,3.29-2.29,6.89-3.6,10.68-1.34,3.88-2.72,7.9-4.06,12.03-.46,1.43-.96,2.87-1.45,4.32-2.35,6.88-4.79,13.99-4.36,21.29,.17,2.89,1.64,5.81,3.43,6.78,1.01,.55,2.06,.78,3.1,.78,4.24,0,8.48-3.85,10.52-5.7,2.79-2.53,8.33-9.28,15.34-17.82,6.33-7.7,14.2-17.29,22.44-26.68,5.78-6.61,9.41-10.32,11.58-12.53,3.02-3.09,3.57-3.65,3.56-5.61Zm-110.77,50.95c-.44-.09-.7-.38-.8-.9-2.12-10.66,5.57-22.4,8.85-27.41,.64-.97,1.04-1.59,1.26-2,2.35,2.35,6.37,2.71,9.77,2.71-.26,7.47-3.58,13.14-6.47,17.26-4.54,6.48-10.39,10.8-12.61,10.33Z"/>
+      </svg>
     </div>
-    <div class="input-group">
-      <label data-en="Loan Tenure" data-bm="Tempoh Loan">Tempoh Loan</label>
-      <select id="tenure" onchange="calcAll()">
-        <option value="5">5 tahun</option>
-        <option value="7" selected>7 tahun</option>
-        <option value="9">9 tahun</option>
-      </select>
+    <h1 class="tw-title"><span data-bm="Semak Kelayakan Toyota" data-en="Toyota Eligibility Checker">Semak Kelayakan Toyota</span></h1>
+    <p class="tw-subtitle"><span data-bm="Semak kelayakan pinjaman untuk model Toyota pilihan anda" data-en="Check loan eligibility for your preferred Toyota model">Semak kelayakan pinjaman untuk model Toyota pilihan anda</span></p>
+  </div>
+
+  <!-- STEP 1: MAKLUMAT KEWANGAN -->
+  <div class="tw-step"><span class="tw-step-num">1</span><span class="tw-step-text" data-bm="MAKLUMAT KEWANGAN" data-en="FINANCIAL INFO">MAKLUMAT KEWANGAN</span></div>
+
+  <div class="tw-card">
+    <div class="tw-grid">
+      <div class="tw-field tw-full">
+        <label class="tw-label" data-bm="Pendapatan Bulanan" data-en="Monthly Income">Pendapatan Bulanan</label>
+        <input class="tw-input" type="number" id="salary" value="5000" min="1000" max="100000" step="500" oninput="calcAll()" style="padding-left:42px">
+      </div>
+      <div class="tw-field">
+        <label class="tw-label" data-bm="Tempoh Pinjaman" data-en="Loan Tenure">Tempoh Pinjaman</label>
+        <div class="tw-sw">
+          <select id="tenure" onchange="calcAll()">
+            <option value="5">5 tahun</option>
+            <option value="7" selected>7 tahun</option>
+            <option value="9">9 tahun</option>
+          </select>
+        </div>
+      </div>
+      <div class="tw-field">
+        <label class="tw-label" data-bm="Kadar Faedah" data-en="Interest Rate">Kadar Faedah</label>
+        <div class="tw-sw">
+          <select id="rate" onchange="calcAll()">
+            <option value="2.5">2.5%</option>
+            <option value="3.0" selected>3.0%</option>
+            <option value="3.5">3.5%</option>
+            <option value="4.0">4.0%</option>
+          </select>
+        </div>
+      </div>
+      <div class="tw-field">
+        <label class="tw-label" data-bm="Down Payment" data-en="Down Payment">Down Payment</label>
+        <div class="tw-sw">
+          <select id="dp" onchange="calcAll()">
+            <option value="10">10%</option>
+            <option value="15">15%</option>
+            <option value="20">20%</option>
+          </select>
+        </div>
+      </div>
+      <div class="tw-pprev tw-full">
+        <div>
+          <div class="tw-pprev-lbl" data-bm="Maksimum Pinjaman Mampu" data-en="Maximum Affordable Loan">Maksimum Pinjaman Mampu</div>
+          <div class="tw-pprev-lbl" style="font-weight:400;text-transform:none;letter-spacing:0;color:#999;margin-top:2px" data-bm="30% dari pendapatan" data-en="30% of income">30% dari pendapatan</div>
+        </div>
+        <div class="tw-pprev-val" id="maxLoanDisplay">RM 0</div>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="input-group">
-      <label data-en="Interest Rate" data-bm="Kadar Faedah">Kadar Faedah</label>
-      <select id="rate" onchange="calcAll()">
-        <option value="2.5">2.5%</option>
-        <option value="3.0" selected>3.0%</option>
-        <option value="3.5">3.5%</option>
-        <option value="4.0">4.0%</option>
-      </select>
+
+  <!-- STEP 2: PILIH MODEL -->
+  <div class="tw-step" style="margin-top:28px"><span class="tw-step-num">2</span><span class="tw-step-text" data-bm="PILIH MODEL" data-en="CHOOSE MODEL">PILIH MODEL</span></div>
+
+  <div class="tw-card" style="border-top-color:var(--t-border)">
+    <div class="tw-section-hdr">
+      <h3><span data-bm="Hasil Kelayakan" data-en="Eligibility Results">Hasil Kelayakan</span></h3>
+      <button class="tw-lang-btn" onclick="toggleLang()">EN</button>
     </div>
-    <div class="input-group">
-      <label data-en="Down Payment" data-bm="Down Payment">Down Payment</label>
-      <select id="dp" onchange="calcAll()">
-        <option value="10">10%</option>
-        <option value="15">15%</option>
-        <option value="20">20%</option>
-      </select>
+
+    <div class="tw-filters" id="filters">
+      <div class="tw-chip active" onclick="setFilter(this,'all')"><span data-bm="Semua" data-en="All">Semua</span> <span class="tw-chip-count" id="countAll">15</span></div>
+      <div class="tw-chip" onclick="setFilter(this,'lulus')"><span data-bm="Lulus" data-en="Eligible">Lulus</span> <span class="tw-chip-count" id="countLulus">0</span></div>
+      <div class="tw-chip" onclick="setFilter(this,'gagal')"><span data-bm="Gagal" data-en="Not Eligible">Gagal</span> <span class="tw-chip-count" id="countGagal">0</span></div>
+      <div class="tw-chip" onclick="setFilter(this,'hatchback')">Hatchback</div>
+      <div class="tw-chip" onclick="setFilter(this,'sedan')">Sedan</div>
+      <div class="tw-chip" onclick="setFilter(this,'suv')">SUV</div>
+      <div class="tw-chip" onclick="setFilter(this,'mpv')">MPV</div>
+      <div class="tw-chip" onclick="setFilter(this,'pickup')">Pickup</div>
+      <div class="tw-chip" onclick="setFilter(this,'crossover')">Crossover</div>
+      <div class="tw-chip" onclick="setFilter(this,'ev')">HEV / EV</div>
     </div>
+
+    <div class="tw-models" id="models"></div>
+    <div class="tw-noresult" id="noResult"><span data-bm="Tiada model yang sepadan" data-en="No matching models">Tiada model yang sepadan</span></div>
   </div>
+
 </div>
 
-<!-- Summary -->
-<div class="summary" id="summary">
-  <div class="big"><span class="currency">RM</span><span id="maxLoan">0</span></div>
-  <div data-en="Maximum affordable loan" data-bm="Maksimum loan mampu dibayar" style="font-size:13px;opacity:.8">Maksimum loan mampu dibayar</div>
-  <div class="details">
-    <div class="detail-item"><div class="num" id="dMonthly">RM0</div><div class="lbl" data-en="Monthly" data-bm="Bulanan">Bulanan</div></div>
-    <div class="detail-item"><div class="num" id="dDown">RM0</div><div class="lbl" data-en="Down Payment" data-bm="DP 10%">DP 10%</div></div>
-    <div class="detail-item"><div class="num" id="dTotal">RM0</div><div class="lbl" data-en="Total Loan" data-bm="Total Pinjaman">Total Pinjaman</div></div>
-  </div>
-</div>
-
-<!-- Filters -->
-<div class="filters">
-  <div class="chip active" onclick="setFilter(this,'all')"><span data-en="All" data-bm="Semua">Semua</span> <span class="chip-count" id="countAll">15</span></div>
-  <div class="chip" onclick="setFilter(this,'lulus')"><span data-en="Eligible" data-bm="Lulus">Lulus</span> <span class="chip-count" id="countLulus">0</span></div>
-  <div class="chip" onclick="setFilter(this,'gagal')"><span data-en="Not Eligible" data-bm="Gagal">Gagal</span> <span class="chip-count" id="countGagal">0</span></div>
-  <div class="chip" onclick="setFilter(this,'hatchback')">Hatchback</div>
-  <div class="chip" onclick="setFilter(this,'sedan')">Sedan</div>
-  <div class="chip" onclick="setFilter(this,'suv')">SUV</div>
-  <div class="chip" onclick="setFilter(this,'mpv')">MPV</div>
-  <div class="chip" onclick="setFilter(this,'pickup')">Pickup</div>
-  <div class="chip" onclick="setFilter(this,'crossover')">Crossover</div>
-  <div class="chip" onclick="setFilter(this,'ev')">EV / HEV</div>
-</div>
-
-<!-- Model Grid -->
-<div class="models" id="models"></div>
-
-<!-- Detail Panel -->
-<div class="detail-overlay" id="overlay" onclick="closeDetail()"></div>
-<div class="detail-panel" id="panel">
-  <div class="handle"></div>
-  <div class="d-header">
-    <div class="d-img"><img id="dImg" src="" alt=""></div>
-    <div class="d-info">
-      <div class="d-name" id="dName"></div>
-      <div class="d-type" id="dType"></div>
-      <div class="d-price"><span class="from">From </span>RM<span id="dPrice">0</span></div>
-      <div class="d-status" id="dStatus"></div>
+<!-- OVERLAY + DETAIL PANEL -->
+<div class="tw-overlay" id="overlay" onclick="closeDetail()"></div>
+<div class="tw-panel" id="panel">
+  <div class="tw-handle"></div>
+  <div class="tw-panel-inner">
+    <div class="tw-p-header">
+      <div class="tw-p-img"><img id="dImg" src="" alt=""></div>
+      <div class="tw-p-info">
+        <div class="tw-p-name" id="dName"></div>
+        <div class="tw-p-type" id="dType"></div>
+        <div class="tw-p-price"><span class="tw-from">From </span>RM<span id="dPrice">0</span></div>
+        <div class="tw-p-status" id="dStatus"></div>
+      </div>
     </div>
+    <h3 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t-muted);margin-bottom:8px" data-bm="Varian Tersedia" data-en="Available Variants">Varian Tersedia</h3>
+    <ul class="tw-vlist" id="variants"></ul>
+    <button class="tw-wa" id="waBtn" onclick="sendWA()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span data-bm="Buat Inquiry WhatsApp" data-en="Inquiry via WhatsApp">Buat Inquiry WhatsApp</span>
+    </button>
   </div>
-  <h3 style="font-size:14px;color:var(--text2);margin-bottom:8px" data-en="Available Variants" data-bm="Varian Tersedia">Varian Tersedia</h3>
-  <ul class="variants" id="variants"></ul>
-  <button class="whatsapp-btn" id="waBtn" onclick="sendWA()">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    <span data-en="Inquiry via WhatsApp" data-bm="Buat Inquiry WhatsApp">Buat Inquiry WhatsApp</span>
-  </button>
 </div>
 
 <script>
@@ -219,21 +306,14 @@ function calcAll() {
   const years = parseInt(document.getElementById('tenure').value);
   const rate = parseFloat(document.getElementById('rate').value) / 100;
   const dpPct = parseInt(document.getElementById('dp').value) / 100;
-
   const maxMonthly = salary * 0.3;
   const totalMonths = years * 12;
   const flatRate = rate * years;
-  // maxLoan = maxMonthly * totalMonths / (1 + flatRate)
   const maxLoan = maxMonthly * totalMonths / (1 + flatRate);
   const totalLoan = maxLoan + (maxLoan * flatRate);
-  const downPayment = maxLoan * dpPct / (1 - dpPct);
+  const downPayment = dpPct === 0 ? 0 : maxLoan * dpPct / (1 - dpPct);
 
-  document.getElementById('maxLoan').textContent = Math.round(maxLoan).toLocaleString();
-  document.getElementById('dMonthly').textContent = 'RM' + Math.round(maxMonthly).toLocaleString();
-  document.getElementById('dDown').textContent = 'RM' + Math.round(downPayment).toLocaleString();
-  document.getElementById('dTotal').textContent = 'RM' + Math.round(totalLoan).toLocaleString();
-
-  document.getElementById('summary').classList.add('active');
+  document.getElementById('maxLoanDisplay').textContent = 'RM ' + Math.round(maxLoan).toLocaleString();
   renderModels(salary, years, rate, dpPct);
 }
 
@@ -256,35 +336,39 @@ function renderModels(salary, years, rate, dpPct) {
   MODELS.forEach((m, i) => {
     const result = calcEligibility(m.price, salary, years, rate, dpPct);
     const status = result.eligible ? 'lulus' : 'gagal';
-    const label = result.eligible ? (lang==='bm'?'✅ Lulus':'✅ Eligible') : (lang==='bm'?'❌ Gagal':'❌ Not Eligible');
+    const label = result.eligible ? '✅ '+(lang==='bm'?'Lulus':'Eligible') : '✕ '+(lang==='bm'?'Gagal':'Not Eligible');
     if (result.eligible) countLulus++; else countGagal++;
 
     let show = true;
     if (filter === 'lulus') show = result.eligible;
     else if (filter === 'gagal') show = !result.eligible;
     else if (filter !== 'all') {
-      const cats = m.cat.split('|');
-      show = cats.includes(filter);
+      show = m.cat.split('|').includes(filter);
     }
 
     if (!show) return;
 
     html += `
-    <div class="model-card" onclick="openDetail(${i})" data-status="${status}">
-      <div class="img-wrap">
-        <img src="${m.img}" alt="${m.name}" onerror="this.parentElement.querySelector('.fallback').style.display='flex';this.style.display='none'" loading="lazy">
-        <div class="fallback" style="display:none">${m.name[0]}</div>
-        <div class="badge badge-${status}">${label}</div>
+    <div class="tw-mcard" onclick="openDetail(${i})" data-status="${status}">
+      <div class="tw-img">
+        <img src="${m.img}" alt="${m.name}" onerror="this.style.display='none';this.parentElement.querySelector('.tw-fallback').style.display='flex'" loading="lazy">
+        <div class="tw-fallback" style="display:none">${m.name[0]}</div>
+        <div class="tw-badge tw-badge-${status}">${label}</div>
       </div>
-      <div class="model-name">${m.name}</div>
-      <div class="model-type">${m.type}</div>
-      <div class="model-price"><span class="from">from </span>RM${m.price.toLocaleString()}</div>
+      <div class="tw-mname">${m.name}</div>
+      <div class="tw-mtype">${m.type}</div>
+      <div class="tw-mprice"><span class="tw-from">from </span>RM${m.price.toLocaleString()}</div>
     </div>`;
   });
 
-  if (!html) html = '<div class="no-results active">' + (lang==='bm'?'Tiada model yang sepadan':'No matching models') + '</div>';
-  grid.innerHTML = html;
+  if (!html) {
+    document.getElementById('noResult').classList.add('show');
+  } else {
+    document.getElementById('noResult').classList.remove('show');
+  }
 
+  grid.innerHTML = html;
+  document.getElementById('countAll').textContent = MODELS.length;
   document.getElementById('countLulus').textContent = countLulus;
   document.getElementById('countGagal').textContent = countGagal;
 }
@@ -302,24 +386,24 @@ function openDetail(idx) {
   document.getElementById('dName').textContent = m.name;
   document.getElementById('dType').textContent = m.type;
   document.getElementById('dPrice').textContent = m.price.toLocaleString();
-  
-  const statusEl = document.getElementById('dStatus');
+
+  const se = document.getElementById('dStatus');
   if (result.eligible) {
-    statusEl.textContent = lang==='bm'?'✅ Lulus — RM' + Math.round(result.monthly).toLocaleString() + '/bln':'✅ Eligible — RM' + Math.round(result.monthly).toLocaleString() + '/mo';
-    statusEl.style.background = '#34c75920';
-    statusEl.style.color = '#34c759';
+    se.textContent = '✅ '+(lang==='bm'?'Lulus — RM':'Eligible — RM')+Math.round(result.monthly).toLocaleString()+(lang==='bm'?'/bln':'/mo');
+    se.style.background = '#1aa85f15';
+    se.style.color = '#1aa85f';
   } else {
-    statusEl.textContent = lang==='bm'?'❌ Gagal — RM' + Math.round(result.monthly).toLocaleString() + '/bln (maks RM' + Math.round(salary*0.3).toLocaleString() + ')':'❌ Not Eligible — RM' + Math.round(result.monthly).toLocaleString() + '/mo (max RM' + Math.round(salary*0.3).toLocaleString() + ')';
-    statusEl.style.background = '#ff950020';
-    statusEl.style.color = '#ff9500';
+    se.textContent = '✕ '+(lang==='bm'?'Gagal — RM':'Not Eligible — RM')+Math.round(result.monthly).toLocaleString()+(lang==='bm'?'/bln (maks RM':'/mo (max RM')+Math.round(salary*0.3).toLocaleString()+')';
+    se.style.background = '#d9820015';
+    se.style.color = '#d98200';
   }
 
-  // Variants
   let vHtml = '';
   m.variants.forEach(v => {
-    const vResult = calcEligibility(v.price, salary, years, rate, dpPct);
-    const vStatus = vResult.eligible ? (lang==='bm'?'✅ Lulus':'✅ E') : (lang==='bm'?'❌ Gagal':'❌ N');
-    vHtml += `<li><span class="v-name">${v.name}</span><span><span class="v-price">RM${v.price.toLocaleString()}</span> <span class="v-status" style="background:${vResult.eligible?'#34c75920':'#ff950020'};color:${vResult.eligible?'#34c759':'#ff9500'}">${vStatus}</span></span></li>`;
+    const vr = calcEligibility(v.price, salary, years, rate, dpPct);
+    const vs = vr.eligible ? '✅' : '✕';
+    const vc = vr.eligible ? '#1aa85f' : '#d98200';
+    vHtml += `<li><span class="tw-vn">${v.name}</span><span><span class="tw-vv">RM${v.price.toLocaleString()}</span><span class="tw-vs" style="background:${vc}15;color:${vc}">${vs}</span></span></li>`;
   });
   document.getElementById('variants').innerHTML = vHtml;
 
@@ -334,7 +418,7 @@ function closeDetail() {
 
 // ── Filters ──────────────────────────────────────────────────────
 function setFilter(el, f) {
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('#filters .tw-chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
   filter = f;
   calcAll();
@@ -345,14 +429,14 @@ function sendWA() {
   const name = document.getElementById('dName').textContent;
   const price = document.getElementById('dPrice').textContent;
   const salary = document.getElementById('salary').value;
-  const msg = encodeURIComponent(`Hi, saya nak inquiry Toyota ${name} (RM${price}). Pendapatan saya RM${salary}/bulan. Boleh bantu?`);
-  window.open(`https://wa.me/60138077961?text=${msg}`, '_blank');
+  const msg = encodeURIComponent('Hi, saya nak inquiry Toyota '+name+' (RM'+price+'). Pendapatan saya RM'+salary+'/bulan. Boleh bantu?');
+  window.open('https://wa.me/60138077961?text='+msg, '_blank');
 }
 
 // ── Language Toggle ──────────────────────────────────────────────
 function toggleLang() {
   lang = lang === 'bm' ? 'en' : 'bm';
-  document.querySelector('.lang-toggle').textContent = lang === 'bm' ? 'EN' : 'BM';
+  document.querySelector('.tw-lang-btn').textContent = lang === 'bm' ? 'EN' : 'BM';
   document.querySelectorAll('[data-bm],[data-en]').forEach(el => {
     if (el.tagName === 'INPUT' || el.tagName === 'SELECT') return;
     el.textContent = el.getAttribute('data-' + lang) || el.textContent;
