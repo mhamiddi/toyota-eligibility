@@ -153,7 +153,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 <!-- Filters -->
 <div class="filters">
-  <div class="chip active" onclick="setFilter(this,'all')"><span data-en="All" data-bm="Semua">Semua</span> <span class="chip-count" id="countAll">32</span></div>
+  <div class="chip active" onclick="setFilter(this,'all')"><span data-en="All" data-bm="Semua">Semua</span> <span class="chip-count" id="countAll">15</span></div>
   <div class="chip" onclick="setFilter(this,'lulus')"><span data-en="Eligible" data-bm="Lulus">Lulus</span> <span class="chip-count" id="countLulus">0</span></div>
   <div class="chip" onclick="setFilter(this,'gagal')"><span data-en="Not Eligible" data-bm="Gagal">Gagal</span> <span class="chip-count" id="countGagal">0</span></div>
   <div class="chip" onclick="setFilter(this,'hatchback')">Hatchback</div>
@@ -162,8 +162,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   <div class="chip" onclick="setFilter(this,'mpv')">MPV</div>
   <div class="chip" onclick="setFilter(this,'pickup')">Pickup</div>
   <div class="chip" onclick="setFilter(this,'crossover')">Crossover</div>
-  <div class="chip" onclick="setFilter(this,'coupe')">Coupe</div>
-  <div class="chip" onclick="setFilter(this,'van')">Van</div>
   <div class="chip" onclick="setFilter(this,'ev')">EV / HEV</div>
 </div>
 
@@ -197,33 +195,18 @@ const MODELS = [
   {id:'yaris', name:'Yaris', type:'Hatchback', cat:'hatchback', price:88000, img:'https://www.toyota.com.my/content/dam/malaysia/models/yaris/overview/yaris-overview-new-v3.jpg', variants:[{name:'Yaris 1.5E',price:88000},{name:'Yaris 1.5G',price:94800},{name:'Yaris 1.5S',price:99800}]},
   {id:'vios', name:'Vios', type:'Sedan', cat:'sedan', price:90600, img:'https://www.toyota.com.my/content/dam/malaysia/models/new-vios/banner/MainPageTiles.jpg', variants:[{name:'Vios 1.5E',price:90600},{name:'Vios 1.5G',price:97600},{name:'Vios 1.5S',price:102800}]},
   {id:'vios-hev', name:'Vios HEV', type:'Sedan Hybrid', cat:'sedan|ev', price:103900, img:'https://www.toyota.com.my/content/dam/malaysia/models/new-vios/banner/MainPageTiles.jpg', variants:[{name:'Vios HEV 1.5',price:103900},{name:'Vios HEV GR Sport',price:109900}]},
-  {id:'veloz', name:'Veloz', type:'MPV', cat:'mpv', price:95000, img:'', variants:[{name:'Veloz 1.5AV',price:95000}]},
-  {id:'yaris-cross', name:'Yaris Cross', type:'SUV', cat:'suv', price:99900, img:'', variants:[{name:'Yaris Cross 1.5S',price:99900},{name:'Yaris Cross 1.5G',price:106900},{name:'Yaris Cross 1.5AV',price:114900}]},
-  {id:'yaris-cross-hev', name:'Yaris Cross HEV', type:'SUV Hybrid', cat:'suv|ev', price:109900, img:'', variants:[{name:'Yaris Cross HEV',price:109900},{name:'Yaris Cross HEV GR Sport',price:119900}]},
-  {id:'hilux', name:'Hilux', type:'Pickup', cat:'pickup', price:104880, img:'', variants:[{name:'Hilux Single Cab 2.4',price:104880},{name:'Hilux Double Cab 2.4E',price:117880},{name:'Hilux Double Cab 2.4V',price:148880},{name:'Hilux Double Cab 2.4V AWD',price:158880}]},
-  {id:'hilux-gr', name:'Hilux GR Sport', type:'Pickup', cat:'pickup', price:173280, img:'', variants:[{name:'Hilux GR Sport 2.4',price:173280}]},
-  {id:'hiace', name:'Hiace', type:'Van', cat:'van', price:127800, img:'', variants:[{name:'Hiace 2.5D',price:127800}]},
-  {id:'corolla-cross', name:'Corolla Cross', type:'Crossover', cat:'crossover', price:133800, img:'', variants:[{name:'Corolla Cross 1.8V AT',price:133800},{name:'Corolla Cross 1.8S',price:138800}]},
-  {id:'corolla', name:'Corolla', type:'Sedan', cat:'sedan', price:144800, img:'', variants:[{name:'Corolla 1.8E',price:144800},{name:'Corolla 1.8G',price:154800},{name:'Corolla 1.8S',price:164800}]},
-  {id:'corolla-cross-hev', name:'Corolla Cross HEV', type:'Crossover Hybrid', cat:'crossover|ev', price:140800, img:'', variants:[{name:'Corolla Cross HEV 1.8',price:140800},{name:'Corolla Cross HEV GR Sport',price:148800}]},
-  {id:'corolla-gr', name:'Corolla GR Sport', type:'Sedan', cat:'sedan', price:149800, img:'', variants:[{name:'Corolla GR Sport',price:149800}]},
-  {id:'zenix', name:'Innova Zenix', type:'Crossover', cat:'crossover|mpv', price:165000, img:'', variants:[{name:'Innova Zenix 2.0E',price:165000},{name:'Innova Zenix 2.0G',price:178000},{name:'Innova Zenix 2.0V',price:195000}]},
-  {id:'new-hiace', name:'New Hiace', type:'Van', cat:'van', price:172000, img:'', variants:[{name:'New Hiace SLWB',price:172000}]},
-  {id:'zenix-hev', name:'Innova Zenix HEV', type:'Crossover Hybrid', cat:'crossover|ev', price:202000, img:'', variants:[{name:'Zenix HEV 2.0',price:202000}]},
-  {id:'fortuner', name:'Fortuner', type:'SUV', cat:'suv', price:195880, img:'', variants:[{name:'Fortuner 2.4L',price:195880},{name:'Fortuner 2.4L AWD',price:215880},{name:'Fortuner 2.8L AWD',price:235880}]},
-  {id:'camry', name:'Camry', type:'Sedan', cat:'sedan', price:221800, img:'', variants:[{name:'Camry 2.5E',price:221800},{name:'Camry 2.5V',price:241800}]},
-  {id:'bz4x', name:'bZ4X', type:'EV Crossover', cat:'crossover|ev', price:220000, img:'', variants:[{name:'bZ4X EV',price:220000}]},
-  {id:'hilux-bev', name:'Hilux BEV', type:'EV Pickup', cat:'pickup|ev', price:226300, img:'', variants:[{name:'Hilux BEV',price:226300}]},
-  {id:'camry-hev', name:'Camry HEV', type:'Sedan Hybrid', cat:'sedan|ev', price:248800, img:'', variants:[{name:'Camry HEV 2.5',price:248800}]},
-  {id:'urban-cruiser', name:'Urban Cruiser', type:'EV Crossover', cat:'crossover|ev', price:198000, img:'', variants:[{name:'Urban Cruiser EV',price:198000}]},
-  {id:'harrier-hev', name:'Harrier HEV', type:'SUV Hybrid', cat:'suv|ev', price:289000, img:'', variants:[{name:'Harrier HEV',price:289000}]},
-  {id:'gr86', name:'GR86', type:'Coupe', cat:'coupe', price:296000, img:'https://www.toyota.com.my/content/dam/malaysia/models/gr-86/explore-thumbnails/toyota-gr-86-navi.png', variants:[{name:'GR86 2.4',price:296000}]},
-  {id:'gr-yaris', name:'GR Yaris', type:'Hatchback', cat:'hatchback|performance', price:315600, img:'https://www.toyota.com.my/content/dam/malaysia/models/gr-yaris/explore-thumbnails/explore-thumbnail-precious-metal-gr-yaris-v2.png', variants:[{name:'GR Yaris 1.6T',price:315600}]},
-  {id:'gr-corolla', name:'GR Corolla', type:'Hatchback', cat:'hatchback|performance', price:368950, img:'https://www.toyota.com.my/content/dam/malaysia/models/gr-corolla/explore-thumbnails/toyota-gr-corolla-navi-v2.png', variants:[{name:'GR Corolla 1.6T',price:368950}]},
-  {id:'vellfire', name:'Vellfire', type:'MPV', cat:'mpv', price:448000, img:'', variants:[{name:'Vellfire 2.5',price:448000}]},
-  {id:'alphard', name:'Alphard', type:'MPV', cat:'mpv', price:548000, img:'', variants:[{name:'Alphard 2.5',price:548000}]},
-  {id:'vellfire-hev', name:'Vellfire HEV', type:'MPV Hybrid', cat:'mpv|ev', price:549900, img:'', variants:[{name:'Vellfire HEV 2.5',price:549900}]},
-  {id:'gr-supra', name:'GR Supra', type:'Coupe', cat:'coupe|performance', price:560000, img:'https://www.toyota.com.my/content/dam/malaysia/models/gr-supra/explore-thumbnail/gr-supra-navi-v3.png', variants:[{name:'GR Supra Track Edition',price:560000}]}
+  {id:'veloz', name:'Veloz', type:'MPV', cat:'mpv', price:95000, img:'https://www.toyota.com.my/content/dam/malaysia/models/veloz/overview/toyota-my-veloz-overview.jpg', variants:[{name:'Veloz 1.5AV',price:95000}]},
+  {id:'yaris-cross', name:'Yaris Cross', type:'SUV', cat:'suv', price:99900, img:'https://www.toyota.com.my/content/dam/malaysia/models/yaris-cross/masthead/v2/toyota-my-main-banner-desktop.jpg', variants:[{name:'Yaris Cross 1.5S',price:99900},{name:'Yaris Cross 1.5G',price:106900},{name:'Yaris Cross 1.5AV',price:114900}]},
+  {id:'yaris-cross-hev', name:'Yaris Cross HEV', type:'SUV Hybrid', cat:'suv|ev', price:109900, img:'https://www.toyota.com.my/content/dam/malaysia/models/yaris-cross-hev/overview/toyota-yaris-cross-hev-overview-v1.jpg', variants:[{name:'Yaris Cross HEV',price:109900},{name:'Yaris Cross HEV GR Sport',price:119900}]},
+  {id:'hilux', name:'Hilux', type:'Pickup', cat:'pickup', price:104880, img:'https://www.toyota.com.my/content/dam/malaysia/models/hilux/overview/toyota-my-hilux-overview-1200x1200.jpg', variants:[{name:'Hilux Single Cab 2.4',price:104880},{name:'Hilux Double Cab 2.4E',price:117880},{name:'Hilux Double Cab 2.4V',price:148880},{name:'Hilux Double Cab 2.4V AWD',price:158880}]},
+  {id:'corolla-cross', name:'Corolla Cross', type:'Crossover', cat:'crossover', price:133800, img:'https://www.toyota.com.my/content/dam/malaysia/models/corolla-cross/overview/toyota-my-corolla-cross-overview.jpg', variants:[{name:'Corolla Cross 1.8V AT',price:133800},{name:'Corolla Cross 1.8S',price:138800}]},
+  {id:'corolla-cross-hev', name:'Corolla Cross HEV', type:'Crossover Hybrid', cat:'crossover|ev', price:140800, img:'https://www.toyota.com.my/content/dam/malaysia/models/corolla-cross-hybrid-electric/overview/toyota-my-corolla-cross-hev-overview.jpg', variants:[{name:'Corolla Cross HEV 1.8',price:140800},{name:'Corolla Cross HEV GR Sport',price:148800}]},
+  {id:'hilux-gr', name:'Hilux GR Sport', type:'Pickup', cat:'pickup', price:173280, img:'https://www.toyota.com.my/content/dam/malaysia/models/hilux-gr-s/overview/Overview-Video-Thumbnail-Hilux-GR-Sport.jpg', variants:[{name:'Hilux GR Sport 2.4',price:173280}]},
+  {id:'zenix', name:'Innova Zenix', type:'Crossover', cat:'crossover', price:165000, img:'https://www.toyota.com.my/content/dam/malaysia/models/zenix/overview/Model-Page-Overview-ICE_V3.jpg', variants:[{name:'Innova Zenix 2.0E',price:165000},{name:'Innova Zenix 2.0G',price:178000},{name:'Innova Zenix 2.0V',price:195000}]},
+  {id:'zenix-hev', name:'Innova Zenix HEV', type:'Crossover Hybrid', cat:'crossover|ev', price:202000, img:'https://www.toyota.com.my/content/dam/malaysia/models/zenix/overview/Model-Page-Overview-HEV_V3.jpg', variants:[{name:'Zenix HEV 2.0',price:202000}]},
+  {id:'camry', name:'Camry', type:'Sedan', cat:'sedan', price:221800, img:'https://www.toyota.com.my/content/dam/malaysia/models/camry-ice/overview/toyota-camry-hybrid-electric-overview.jpg', variants:[{name:'Camry 2.5E',price:221800},{name:'Camry 2.5V',price:241800}]},
+  {id:'hilux-bev', name:'Hilux BEV', type:'EV Pickup', cat:'pickup|ev', price:226300, img:'https://www.toyota.com.my/content/dam/malaysia/models/hilux-bev/overview/toyota-my-hilux-bev-hev-overview.jpg', variants:[{name:'Hilux BEV',price:226300}]},
+  {id:'camry-hev', name:'Camry HEV', type:'Sedan Hybrid', cat:'sedan|ev', price:248800, img:'https://www.toyota.com.my/content/dam/malaysia/models/camry-hybrid-electric/overview/toyota-camry-hybrid-electric-overview-01.jpg', variants:[{name:'Camry HEV 2.5',price:248800}]}
 ];
 
 // ── State ─────────────────────────────────────────────────────────
